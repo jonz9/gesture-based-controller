@@ -13,8 +13,18 @@ def get_args():
     parser.add_argument("--height", type=int, default=700)
     parser.add_argument("--max_num_hands", type=int, default=1)
     parser.add_argument("--use_static_image_mode", type=bool, default=True)
-    parser.add_argument("--min_detection_confidence", help='--min_detection_confidence', type=float, default=0.7)
-    parser.add_argument("--min_tracking_confidence", help='--min_tracking_confidence', type=int, default=0.5)
+    parser.add_argument(
+        "--min_detection_confidence",
+        help="--min_detection_confidence",
+        type=float,
+        default=0.7,
+    )
+    parser.add_argument(
+        "--min_tracking_confidence",
+        help="--min_tracking_confidence",
+        type=int,
+        default=0.5,
+    )
 
     args = parser.parse_args()
 
@@ -49,10 +59,10 @@ def get_args():
 #     Gesture Functionalities
 #     - Volumn Up/Down: thumb up/down
 #     - Brightness Up/Down: index up/down
-#     - Media Control (Play/Pause, Next, Previous): 
-#     - Mouse Control (Move, Click, Scroll): 
-#     - Microphone Control (Mute, Unmute): 
-#     - Screen Capture (Take Screenshot, Record Screen): 
+#     - Media Control (Play/Pause, Next, Previous):
+#     - Mouse Control (Move, Click, Scroll):
+#     - Microphone Control (Mute, Unmute):
+#     - Screen Capture (Take Screenshot, Record Screen):
 #     """
 
 #     # sensitivity control
