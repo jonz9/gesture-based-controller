@@ -1,32 +1,94 @@
-Notes Area Ig for now:
+# Gesture Navigator
 
-csv & collections - used for gesture history for dynamic gestures
+A real-time gesture recognition system that uses computer vision and machine learning to control devices through hand gestures.
 
-itertools & argparse - handles command-line arguments
+## Features
 
-FPS calculation done by utils - buffer length 10 for FPS smoothing
+-   Real-time hand gesture recognition using MediaPipe
+-   Support for both static and dynamic gestures
+-   Smooth gesture tracking with history buffering
+-   Configurable camera parameters
+-   FPS monitoring and optimization
+-   Device control capabilities
 
-parser used to set camera parameters
+## Requirements
 
-> allows to run something like this:
-> python script.py --device 1 --width 1280 --height 720
+-   Python 3.7+
+-   MediaPipe
+-   OpenCV
+-   TensorFlow
+-   scikit-learn
+-   Other dependencies listed in `requirements.txt`
 
-Uses MediaPipe's hand detection model:
+## Installation
 
-mp_hands = mp.solutions.hands
-hands = mp_hands.Hands(
-static_image_mode=use_static_image_mode,
-max_num_hands=1,
-min_detection_confidence=min_detection_confidence,
-min_tracking_confidence=min_tracking_confidence,
-)
+1. Clone the repository:
 
-- detection confidence is probability threshold for hand detection
-- tracking confidence is tracking accuracy for gestures
+```bash
+git clone https://github.com/jonz9/gesture-based-controller.git
+cd gesture-navigator
+```
 
-Keypoint Classifier - model for recognizing static hand gestures
-Point History Classifier - model for tracking model-based gestures
+2. Create and activate a virtual environment:
 
-we store past movements using history_length variable of 16
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-- this ensures smooth gesture recognition
+3. Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Project Structure
+
+```
+gesture-navigator/
+├── app.py                 # Main application entry point
+├── camera/                # Camera handling and configuration
+├── utils/                 # Utility functions and FPS calculation
+├── pointhistory/          # Point history tracking implementation
+├── landmarks/             # Hand landmark processing
+├── models/                # Gesture classification models
+└── requirements.txt       # Project dependencies
+```
+
+## Usage
+
+Run the application with default settings:
+
+```bash
+python app.py
+```
+
+Configure camera parameters:
+
+```bash
+python app.py --device 1 --width 1280 --height 720
+```
+
+### Command Line Arguments
+
+-   `--device`: Camera device index (default: 0)
+-   `--width`: Camera capture width (default: 960)
+-   `--height`: Camera capture height (default: 540)
+
+## Gesture Recognition
+
+The system uses two main components for gesture recognition:
+
+1. **Keypoint Classifier**: Recognizes static hand gestures
+2. **Point History Classifier**: Tracks and recognizes dynamic gestures
+
+Gesture history is maintained using a buffer of 16 frames to ensure smooth recognition.
+
+## Configuration
+
+The system can be configured through the following parameters:
+
+-   `min_detection_confidence`: Probability threshold for hand detection
+-   `min_tracking_confidence`: Tracking accuracy threshold for gestures
+-   `history_length`: Number of frames to maintain for gesture history (default: 16)
+-   `FPS_buffer_length`: Number of frames for FPS smoothing (default: 10)

@@ -1,9 +1,8 @@
 import tkinter as tk
 import argparse
 
-from gesture_recognition.camera import main as gesture_recognition_main
 from tkinter import ttk
-
+from camera.camera import gesture_recognition_main
 
 def get_args():
     parser = argparse.ArgumentParser()

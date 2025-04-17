@@ -7,7 +7,7 @@ import mediapipe as mp
 from collections import deque
 from collections import Counter
 
-from utils import CvFpsCalc
+from utils import FpsCalc
 from landmarks import calc_landmark_list
 from landmarks import pre_process_landmark
 from landmarks import draw_landmarks
@@ -15,9 +15,11 @@ from pointhistory import draw_point_history
 from pointhistory import pre_process_point_history
 from models import KeyPointClassifier
 from models import PointHistoryClassifier
+# fix import errors
 
 
-def main(
+# main function
+def gesture_recognition_main(
     cap_device,
     cap_width,
     cap_height,
@@ -35,12 +37,12 @@ def main(
     cap.set(cv.CAP_PROP_FRAME_HEIGHT, cap_height)
 
     # FPS calculation
-    cvFpsCalc = CvFpsCalc(buffer_len=10)
+    FpsCalc = FpsCalc(buffer_len=10)
 
     # Load mediapipe and classification models for hand detection
     mp_hands = mp.solutions.hands
     hands = mp_hands.Hands(
-        model_complexity=0,
+        static_image_mode=use_static_image_mode,
         max_num_hands=max_num_hands,
         min_detection_confidence=min_detection_confidence,
         min_tracking_confidence=min_tracking_confidence,
@@ -231,7 +233,7 @@ def main(
 
     # Main loop
     while True:
-        fps = cvFpsCalc.get()
+        fps = FpsCalc.get()
 
         # ESC: end key
         key = cv.waitKey(10)
@@ -313,7 +315,3 @@ def main(
 
         cap.release()
         cv.destroyAllWindows()
-
-
-if __name__ == "__main__":
-    main()
