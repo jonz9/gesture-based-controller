@@ -253,7 +253,7 @@ def gesture_recognition_main(
 
                 pre_processed_landmark_list = pre_process_landmark(landmark_list)
                 pre_processed_point_history_list = pre_process_point_history(
-                    point_history
+                    debug_image, point_history
                 )
 
                 # write to dataset
