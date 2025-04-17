@@ -5,7 +5,7 @@ import tensorflow as tf
 # Keypoint classifier class for classifying static gestures
 class KeypointClassifier(object):
     def __init__(
-        self, model_path="model/keypoint_classifier/keypoint_classifier.tflite"
+        self, model_path="models/keypoint_classifier/keypoint_classifier.tflite"
     ):
         self.interpreter = tf.lite.Interpreter(model_path=model_path)
 

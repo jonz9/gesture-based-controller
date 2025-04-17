@@ -7,18 +7,16 @@ import mediapipe as mp
 from collections import deque
 from collections import Counter
 
-from utils import FpsCalc
-from landmarks import calc_landmark_list
-from landmarks import pre_process_landmark
-from landmarks import draw_landmarks
-from pointhistory import draw_point_history
-from pointhistory import pre_process_point_history
-from models import KeyPointClassifier
-from models import PointHistoryClassifier
-# fix import errors
+from utils.fpscalc import FpsCalc
+from landmarks.landmarks import calc_landmark_list
+from landmarks.landmarks import pre_process_landmark
+from landmarks.landmarks import draw_landmarks
+from pointhistory.pointhistory import draw_point_history
+from pointhistory.pointhistory import pre_process_point_history
+from models.keypoint_classifier.keypoint_classifier import KeypointClassifier
+from models.point_history_classifier.point_history_classifier import PointHistoryClassifier
 
 
-# main function
 def gesture_recognition_main(
     cap_device,
     cap_width,
@@ -36,10 +34,8 @@ def gesture_recognition_main(
     cap.set(cv.CAP_PROP_FRAME_WIDTH, cap_width)
     cap.set(cv.CAP_PROP_FRAME_HEIGHT, cap_height)
 
-    # FPS calculation
-    FpsCalc = FpsCalc(buffer_len=10)
+    fps_calc = FpsCalc(buffer_len=10)
 
-    # Load mediapipe and classification models for hand detection
     mp_hands = mp.solutions.hands
     hands = mp_hands.Hands(
         static_image_mode=use_static_image_mode,
@@ -48,18 +44,18 @@ def gesture_recognition_main(
         min_tracking_confidence=min_tracking_confidence,
     )
 
-    keypoint_classifier = KeyPointClassifier()
+    keypoint_classifier = KeypointClassifier()
     point_history_classifier = PointHistoryClassifier()
 
     # Read labels for gesture classification
     with open(
-        "model/keypoint_classifier/keypoint_classifier_label.csv", encoding="utf-8-sig"
+        "models/keypoint_classifier/keypoint_classifier_label.csv", encoding="utf-8-sig"
     ) as f:
         """
         Isolates first column as gesture labels:
         0:
         1:
-        2:
+        2: 
         3:
         """
 
@@ -67,16 +63,9 @@ def gesture_recognition_main(
         keypoint_classifier_labels = [row[0] for row in keypoint_classifier_labels]
 
     with open(
-        "model/point_history_classifier/point_history_classifier_label.csv",
+        "models/point_history_classifier/point_history_classifier_label.csv",
         encoding="utf-8-sig",
     ) as f:
-        """
-        Isolates first column as dynamic gesture labels:
-        0:
-        1:
-        2:
-        """
-
         point_history_classifier_labels = csv.reader(f)
         point_history_classifier_labels = [
             row[0] for row in point_history_classifier_labels
@@ -90,21 +79,6 @@ def gesture_recognition_main(
     # Mode 0: Gesture recognition
     mode = 0
 
-    def logging_csv(number, mode, landmark_list, point_history_list):
-        if mode == 0:
-            pass
-        if mode == 1 and (0 <= number <= 9):
-            csv_path = "model/keypoint_classifier/keypoint.csv"
-            with open(csv_path, "a", newline="") as f:
-                writer = csv.writer(f)
-                writer.writerow([number, *landmark_list])
-        if mode == 2 and (0 <= number <= 9):
-            csv_path = "model/point_history_classifier/point_history.csv"
-            with open(csv_path, "a", newline="") as f:
-                writer = csv.writer(f)
-                writer.writerow([number, *point_history_list])
-        return
-
     def select_mode(key, mode):
         number = -1
         if 48 <= key <= 57:  # 0 ~ 9
@@ -116,6 +90,21 @@ def gesture_recognition_main(
         if key == 104:  # h
             mode = 2
         return number, mode
+
+    def logging_csv(number, mode, landmark_list, point_history_list):
+        if mode == 0:
+            pass
+        if mode == 1 and (0 <= number <= 9):
+            csv_path = "models/keypoint_classifier/keypoint.csv"
+            with open(csv_path, "a", newline="") as f:
+                writer = csv.writer(f)
+                writer.writerow([number, *landmark_list])
+        if mode == 2 and (0 <= number <= 9):
+            csv_path = "models/point_history_classifier/point_history.csv"
+            with open(csv_path, "a", newline="") as f:
+                writer = csv.writer(f)
+                writer.writerow([number, *point_history_list])
+        return
 
     # calculates bounding box for hand in camera
     def calc_bounding_rect(image, landmarks):
@@ -231,9 +220,9 @@ def gesture_recognition_main(
                 )
         return image
 
-    # Main loop
+    # main loop
     while True:
-        fps = FpsCalc.get()
+        fps = fps_calc.get()
 
         # ESC: end key
         key = cv.waitKey(10)
@@ -310,8 +299,8 @@ def gesture_recognition_main(
                 debug_image = draw_point_history(debug_image, point_history)
                 debug_image = draw_info(debug_image, fps, mode, number)
 
-                # screen
-                cv.imshow("Hand Gesture Recognition", debug_image)
+        # Always show the window, even if no hands are detected
+        cv.imshow("Hand Gesture Recognition", debug_image)
 
-        cap.release()
-        cv.destroyAllWindows()
+    cap.release()
+    cv.destroyAllWindows()

@@ -7,7 +7,7 @@ from camera.camera import gesture_recognition_main
 def get_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--device", type=bool, default=True)
+    parser.add_argument("--device", type=int, default=0)
     parser.add_argument("--width", type=int, default=1100)
     parser.add_argument("--height", type=int, default=700)
     parser.add_argument("--max_num_hands", type=int, default=1)
@@ -107,6 +107,7 @@ if __name__ == "__main__":
         cap_device,
         cap_width,
         cap_height,
+        max_num_hands,
         use_static_image_mode,
         min_detection_confidence,
         min_tracking_confidence,
