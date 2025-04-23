@@ -84,6 +84,14 @@ The system uses two main components for gesture recognition:
 
 Gesture history is maintained using a buffer of 16 frames to ensure smooth recognition.
 
+## Modes
+
+The system also has 3 different modes for usage (0, 1, 2):
+
+1. **Default**: 'n' key - normal gesture recognition mode and performs device control
+2. **Logging Key Points**: 'k' key - logs the current hand landmark positions and '0-9' is used to track static gesture number. Used for fine-tuning.
+3. **Logging Point History**: 'h' key - logs the current point history positions and '0-9' is used to track dynamic gesture number. Used for fine-tuning.
+
 ## Configuration
 
 The system can be configured through the following parameters:

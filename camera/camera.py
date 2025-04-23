@@ -71,17 +71,17 @@ def gesture_recognition_main(
             row[0] for row in point_history_classifier_labels
         ]
 
-    # Coordionate History for point history classification (dynamic gestures)
+    # Coordionate history for point history classification (dynamic gestures)
     history_length = 16
     point_history = deque(maxlen=history_length)
     finger_gesture_history = deque(maxlen=history_length)
 
-    # Mode 0: Gesture recognition
+    # Set default mode
     mode = 0
 
     def select_mode(key, mode):
         number = -1
-        if 48 <= key <= 57:  # 0 ~ 9
+        if 48 <= key <= 57:  # 0 - 9
             number = key - 48
         if key == 110:  # n
             mode = 0

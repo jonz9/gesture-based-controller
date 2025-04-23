@@ -10,4 +10,6 @@ scipy>=1.5.2
 tensorflow-macos
 tensorflow-metal
 jupyter
+pyobjc==11.0
+pyautogui==0.9.54
 
